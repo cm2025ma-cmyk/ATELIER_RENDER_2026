@@ -22,6 +22,12 @@ resource "render_web_service" "flask_app" {
   plan   = "free"
   region = "frankfurt"
 
+env_vars = {
+  ENV = {
+    value = "production"
+  }
+}
+
   runtime_source = {
     image = {
       image_url = var.image_url
