@@ -17,16 +17,27 @@ variable "github_actor" {
   type        = string
 }
 
+# ─── PostgreSQL Managed Database ───────────────────────────────────────────────
+resource "render_postgres" "db" {
+  name   = "postgres-${var.github_actor}"
+  region = "frankfurt"
+  plan   = "free"
+}
+
+# ─── Flask Web Service ──────────────────────────────────────────────────────────
 resource "render_web_service" "flask_app" {
   name   = "flask-render-iac-${var.github_actor}"
   plan   = "free"
   region = "frankfurt"
 
-env_vars = {
-  ENV = {
-    value = "production"
+  env_vars = {
+    ENV = {
+      value = "production"
+    }
+    DATABASE_URL = {
+      value = render_postgres.db.connection_info.external_connection_string
+    }
   }
-}
 
   runtime_source = {
     image = {
@@ -35,4 +46,27 @@ env_vars = {
     }
   }
 
+  depends_on = [render_postgres.db]
+}
+
+# ─── Adminer Web Service ────────────────────────────────────────────────────────
+resource "render_web_service" "adminer" {
+  name   = "adminer-${var.github_actor}"
+  plan   = "free"
+  region = "frankfurt"
+
+  env_vars = {
+    ADMINER_DEFAULT_SERVER = {
+      value = render_postgres.db.connection_info.host
+    }
+  }
+
+  runtime_source = {
+    image = {
+      image_url = "adminer"
+      tag       = "latest"
+    }
+  }
+
+  depends_on = [render_postgres.db]
 }
