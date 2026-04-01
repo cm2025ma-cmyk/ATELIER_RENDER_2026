@@ -21,6 +21,7 @@ resource "render_postgres" "db" {
   name   = "postgres-${var.github_actor}"
   region = "frankfurt"
   plan   = "free"
+  version = "15"
 }
 
 # ─── Flask Web Service ──────────────────────────────────────────────────────────
