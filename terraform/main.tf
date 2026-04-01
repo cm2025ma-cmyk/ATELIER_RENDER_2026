@@ -55,11 +55,9 @@ resource "render_web_service" "adminer" {
   plan   = "free"
   region = "frankfurt"
 
-  env_vars = {
-    ADMINER_DEFAULT_SERVER = {
-      value = render_postgres.db.connection_info.host
-    }
-  }
+  env_vars = { 
+  ADMINER_DEFAULT_SERVER = { value = render_postgres.db.connection_info.external_connection_string } 
+}
 
   runtime_source = {
     image = {
