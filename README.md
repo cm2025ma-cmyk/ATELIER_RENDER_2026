@@ -95,6 +95,7 @@ def env():
     return {"env": os.getenv("ENV")}
 ```
 Observation : Terraform a bien injecter une variable d'environnement dans Render et vous êtes en mesure de pouvoir l'utiliser (ex : affichage).  
+<img width="810" height="123" alt="image" src="https://github.com/user-attachments/assets/eab821b8-89b4-4dd7-b5a6-124a719076ed" />
 
 ---------------------------------------------------
 ✅ Séquence 5 : Atelier  
